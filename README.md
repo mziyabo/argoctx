@@ -23,11 +23,11 @@ cp argoctx /usr/local/bin
 
 ```
 USAGE:
-    argoctx               : switch contexts (w/ fzf)
-    argoctx <NAME>        : switch to context <NAME>
-    argoctx -l, --list    : list contexts
-    argoctx -d, --delete  : delete context
-    argoctx -c, --current : show the current context name
+    argoctx                 : switch contexts (w/ fzf)
+    argoctx <NAME>          : switch to context <NAME>
+    argoctx -l, --list      : list contexts
+    argoctx -d <NAME>       : delete context
+    argoctx -c, --current   : show the current context name
 ```
 
 ### Release Notes:
