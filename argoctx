@@ -20,7 +20,7 @@ Usage:
     $SELF               : switch contexts
     $SELF <NAME>        : switch to context <NAME>
     $SELF -l, --list    : list contexts
-    $SELF -d, --delete  : delete context
+    $SELF -d <NAME>     : delete context
     $SELF -c, --current : show the current context name
 EOF
 }
@@ -42,7 +42,7 @@ list_contexts() {
 
  for context in ${contexts[@]}; do 
     if [[ ${context} == $(current_context) ]]; then
-        echo -e "\e[33m $context \e[0m"
+        printf "\e[33m${context}\e[0m\n"
     else
         echo $context
     fi 
