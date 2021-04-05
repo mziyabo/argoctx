@@ -1,3 +1,4 @@
+shopt -s extglob
 
 _argocd_contexts() {
   local curr_arg prev opts;
@@ -12,7 +13,7 @@ _argocd_contexts() {
     pattern="- name: "
     ARGOCD_CONFIG="${XDG_CACHE_HOME:-$HOME/.argocd}/config"
 
-    COMPREPLY=( $(compgen -W $(grep $ARGOCD_CONFIG -e "${pattern}"|sed s/"${pattern}"//g) -- ${curr_arg}) );
+    COMPREPLY=( $(compgen -W "$(grep $ARGOCD_CONFIG -e "${pattern}"|sed s/"${pattern}"//g)" -- ${curr_arg}) );
   fi
 
 }
