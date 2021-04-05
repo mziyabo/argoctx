@@ -1,8 +1,6 @@
 ## argoctx 
 Simple utility to manage and switch between [argocd](https://argoproj.github.io/argo-cd/) contexts.
 
-![Proudly written in Bash](https://img.shields.io/badge/written%20in-bash-ff69b4.svg)
-
 ### Prerequisites
 
 - [fzf - command-line fuzzy finder](https://github.com/junegunn/fzf)
