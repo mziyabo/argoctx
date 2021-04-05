@@ -9,11 +9,12 @@ Simple utility to manage and switch between [argocd](https://argoproj.github.io/
 ### Installation
 
 ``` bash
-# clone and move to directory in PATH
 git clone https://github.com/mziyabo/argoctx
-chmod +x argoctx
+cd argoctx
 
-mv argoctx /usr/bin/local
+# copy to directory in PATH
+chmod +x argoctx
+cp argoctx /usr/local/bin
 ```
 
 <kbd>bash</kbd> and <kbd>zsh</kbd> context completions scripts under `./completions` directory :
