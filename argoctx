@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+#
+# argoctx(1) is a utility to manage and switch between argocd contexts.
+
+[[ -n $DEBUG ]] && set -x
+
+set -eou pipefail
+
+ARGOCD_CONFIG="${XDG_CACHE_HOME:-$HOME/.argocd}/config"
+
+usage() {
+    local SELF
+    SELF="argoctx"
+
+    cat <<EOF
+Simple utility to manage and switch between argocd contexts
+
+Usage:
+    $SELF               : switch contexts
+    $SELF <NAME>        : switch to context <NAME>
+    $SELF -l, --list    : list contexts
+    $SELF -d, --delete  : delete context
+    $SELF -c, --current : show the current context name
+EOF
+}
+
+switch_context_interactively() {
+
+    selection=$(list_contexts|fzf --ansi --no-preview)
+    if [[ -z ${selection} ]]; then
+        echo 2>&1 "error: no argocd context selected."
+        exit 1
+    else
+        argocd context $selection
+    fi
+}
+
+list_contexts() {
+    pattern='- name: '
+    contexts=$(grep $ARGOCD_CONFIG -e "${pattern}"|sed s/"${pattern}"//g)
+
+ for context in ${contexts[@]}; do 
+    if [[ ${context} == $(current_context) ]]; then
+        echo -e "\e[33m $context \e[0m"
+    else
+        echo $context
+    fi 
+ done
+}
+
+current_context(){
+    pattern="current-context: "
+    echo $(grep $ARGOCD_CONFIG -e "${pattern}"|sed s/"${pattern}"//g)
+}
+
+delete_context(){
+    argocd context ${1} --delete
+}
+
+main() {
+
+    if [[ -z "${ARGOCD:-}" ]]; then
+        if hash argocd 2>/dev/null; then
+            ARGOCD=argocd
+        else
+            echo >&2 "argocd is not installed"
+            exit 1
+        fi
+    fi
+
+    if [[ "$#" -eq 0 ]]; then
+        if [[ "$(type fzf &>/dev/null; echo $?)" == 0 ]]; then
+            switch_context_interactively
+        else
+            list_contexts
+        fi
+    elif [[ "$#" -eq 1 ]]; then
+        if [[ ${1} =~ ^- ]]; then
+            if [[ "${1}" == @(-c|--current) ]]; then
+                current_context
+            elif [[ "${1}" == @(-l|--list) ]]; then
+                argocd context
+            elif [[ "${1}" == @(-h|--help) ]]; then
+                usage
+            elif [[ "${1}" == '-d' ]]; then   
+                echo "error: missing context name" >&2
+                exit 1
+            else
+                echo "error: unrecognized flag \"${1}\"" >&2
+                usage
+                exit 1
+            fi
+        else
+            argocd context ${1}  
+        fi
+    elif [[ "$#" -eq 2 ]]; then
+        if [[ "${1}" == @(-d|--delete) ]]; then
+            argocd context ${2} --delete
+        fi
+    else
+        usage;
+        exit 1;
+    fi
+}
+
+main "$@"
