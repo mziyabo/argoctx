@@ -5,6 +5,7 @@
 [[ -n $DEBUG ]] && set -x
 
 set -eou pipefail
+shopt -s extglob
 
 ARGOCD_CONFIG="${XDG_CACHE_HOME:-$HOME/.argocd}/config"
 
