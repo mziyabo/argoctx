@@ -12,10 +12,8 @@ _argocd_contexts() {
   elif [[ ${prev} == @(-d|--delete) || ${prev} == "argoctx" ]]; then
     pattern="- name: "
     ARGOCD_CONFIG="${XDG_CACHE_HOME:-$HOME/.argocd}/config"
-
     COMPREPLY=( $(compgen -W "$(grep $ARGOCD_CONFIG -e "${pattern}"|sed s/"${pattern}"//g)" -- ${curr_arg}) );
   fi
-
 }
 
 complete -F _argocd_contexts argoctx
